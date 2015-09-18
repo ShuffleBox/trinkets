@@ -8,7 +8,6 @@ class SensorTagSerializer(serializers.ModelSerializer):
         model = SensorTag
         fields = ('mac_address',
                   'slug',
-                  'location',
                   'description')
 
 class SensorTagDetailSerializer(serializers.ModelSerializer):

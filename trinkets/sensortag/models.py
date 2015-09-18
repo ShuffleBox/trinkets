@@ -1,6 +1,5 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-from location.models import Room
 
 class SensorTag(models.Model):
     '''
@@ -8,14 +7,20 @@ class SensorTag(models.Model):
     '''
     
     mac_address = models.CharField(verbose_name = 'MAC Address', max_length = 17)
-    slug = models.SlugField()
-    location = models.ForeignKey(Room, blank=True, null=True)    
+    slug = models.SlugField()   
     description = models.TextField()
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.mac_address)
         super(SensorTag, self).save(*args, **kwargs)
-        
+    
+    @property
+    def latest_data(self):
+        """
+        Latest entry
+        """
+        latest_reading = self.sensordata_set.latest('time_recorded')
+        return latest_reading    
     
 
 class SensorData(models.Model):
